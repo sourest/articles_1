@@ -6,9 +6,6 @@ jobs:
       - image: circleci/node:13.6.0
     steps:
       - checkout
-      # - run:
-      #     name: update-npm
-      #     command: 'sudo npm install -g npm@latest'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -22,17 +19,14 @@ jobs:
           name: build
           command: npm run build
       - run:
-          name: move
-          command: mv ./docs/.vuepress/dist ./publish
-      - run:
-          name: list
-          command: ls -all
-      # - store_artifacts:
-      #     path: test-results.xml
-      #     prefix: tests
-      # - store_artifacts:
-      #     path: coverage
-      #     prefix: coverage
-      # - store_test_results:
-      #     path: test-results.xml
+          name: deploy
+          command: |
+            cd ./docs/.vuepress/dist
+            ls -all
+            git init
+            git config user.name "Kiro"
+            git config user.email "dotkiro@gmail.com"
+            git add -A
+            git commit -m "Deploy"
+            git push -f "https://${GH_TOKEN}@github.com/dotkiro/articles.git" master:gh-pages
      
