@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build:
+  build-go:
     working_directory: ~/mern-starter
     docker:
       - image: circleci/node:13.6.0
@@ -22,11 +22,20 @@ jobs:
           name: deploy
           command: |
             cd ./docs/.vuepress/dist
-            ls -all
             git init
             git config user.name "Kiro"
             git config user.email "dotkiro@gmail.com"
             git add -A
             git commit -m "Deploy"
             git push -f "https://${GH_TOKEN}@github.com/dotkiro/articles.git" master:gh-pages
-     
+
+workflows:
+  version: 2.1
+  just-do:
+    jobs:
+      - build-go:
+          filters:
+            branches:
+              ignore: gh-pages
+            tags:
+              ignore: /.*/
