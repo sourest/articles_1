@@ -1,0 +1,44 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+env:
+  NODE_VERSION: 16.15
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+  job-named-build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.1.1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Show Versions
+        run: |
+          git --version
+          node --version
+          npm --version
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        run: |
+          cd ./docs/.vuepress/dist
+          git init
+          git config user.name "Circle CI"
+          git config user.email "workflow-ci-deploy@github.com"
+          git add -A
+          git commit -m "documents: GitHub CI Automatic Deployment"
