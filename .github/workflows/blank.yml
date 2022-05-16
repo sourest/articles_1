@@ -42,6 +42,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd ./docs/.vuepress/dist
+          echo $GITHUB_TOKEN
           git init
           git config user.name "Circle CI"
           git config user.email "workflow-ci-deploy@github.com"
