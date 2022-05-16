@@ -39,7 +39,7 @@ jobs:
         run: npm run build
       - name: Deploy
         env:
-          GITHUB_TOKEN: ${{ secrets.TEST_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd ./docs/.vuepress/dist
           git init
@@ -47,4 +47,4 @@ jobs:
           git config user.email "workflow-ci-deploy@github.com"
           git add -A
           git commit -m "documents: GitHub CI Automatic Deployment"
-          git push -f "https://${GITHUB_TOKEN}@github.com/dotkiro/articles.git" master:GitHub_Pages
+          git push -f "https://${GITHUB_TOKEN}@github.com/dotkiro/articles.git" master:gh-pages
